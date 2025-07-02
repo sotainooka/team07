@@ -1,0 +1,102 @@
+[33mcommit e8048a77857d08cc7f19592f90d0008b8d839619[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: sotainooka <k520056b@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 12:15:50 2025 +0900
+
+    Add files via upload
+
+[33mcommit a2cec75a165bc3de4e088a7497ef136b092f34a3[m
+Author: haradakaiki <k520369z@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 12:05:04 2025 +0900
+
+    result
+
+[33mcommit d4dda8caca9b226ecae22f9df15143ec80a2e478[m
+Merge: b000162 dba798d
+Author: Yuri Matsumura <k520427m@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 12:04:00 2025 +0900
+
+    Merge branch 'main' of https://github.com/sotainooka/team07
+
+[33mcommit dba798d94cc2314b810efa86db2568ad1086fb9d[m
+Author: haradakaiki <k520369z@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 12:03:43 2025 +0900
+
+    Create materials.pptx
+
+[33mcommit b00016269217191623972be64515acaaa6234b9e[m
+Author: Yuri Matsumura <k520427m@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 12:02:12 2025 +0900
+
+    フォルダとファイルの追加
+    
+    フォルダとファイルを新しく追加した
+
+[33mcommit b702ba99488877dbd45a5e8b34d5adcbd887088d[m
+Author: sotainooka <k520056b@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 11:59:50 2025 +0900
+
+    materials
+
+[33mcommit 91ef0e2742e54541950921321db518183c48f6d5[m
+Author: haradakaiki <k520369z@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 11:44:09 2025 +0900
+
+    Create materials
+
+[33mcommit 08c970d6e0c28bd68263d11c8b3094abca55e890[m
+Author: haradakaiki <k520369z@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 11:39:35 2025 +0900
+
+    概要
+
+[33mcommit 5029fa3c0823825e183c8ce2d7f638f63254bec6[m
+Author: sotainooka <k520056b@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jul 2 10:36:52 2025 +0900
+
+    Update README.md
+
+[33mcommit b1b23bbc3802cb151faa575603881a38474265dc[m
+Author: Yuri Matsumura <k520427m@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jun 25 13:02:34 2025 +0900
+
+    ファイルの変更
+    
+    名前を追加した。
+
+[33mcommit 0611857264aa21683c44b92ec756502107e168ee[m
+Author: Sota Inooka <k520056b@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jun 25 12:30:21 2025 +0900
+
+    sotainookaを追加
+
+[33mcommit a05e84f9dc3f73c5e912e28f51852387bc673eb6[m
+Merge: f7a2ed0 3925ab9
+Author: Kaiki Harada <k520369z@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jun 25 12:07:49 2025 +0900
+
+    Merge branch 'main' of https://github.com/sotainooka/tea
+    原田海輝
+
+[33mcommit 3925ab94200e96890243754c3b997f5459c92ee8[m
+Author: sotainooka <k520056b@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jun 25 12:03:39 2025 +0900
+
+    Update README.md
+
+[33mcommit 68e7e2c069249476dfaa3668d8a0734c5037c6cc[m
+Author: sotainooka <k520056b@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jun 25 11:59:42 2025 +0900
+
+    Update README.md
+
+[33mcommit f7a2ed0a7846520d8da921d9594087047840bffe[m
+Author: Kaiki Harada <k520369z@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jun 25 11:58:22 2025 +0900
+
+    原田海輝
+
+[33mcommit 11d0c03e7deaa3da0b2a9cf7dc95d31c38c75f90[m
+Author: sotainooka <k520056b@mails.cc.ehime-u.ac.jp>
+Date:   Wed Jun 25 11:46:09 2025 +0900
+
+    Initial commit

@@ -1,0 +1,307 @@
+Bulletクラス 
+
+// Bullet.pde
+  float x, y;        // 弾/レーザーの現在のX, Y座標
+  float speedX, speedY; // 弾/レーザーのX, Y方向の移動速度
+  int damage;        // 弾/レーザーの攻撃力
+  String type;       // 弾の種類 ("player_bullet", "player_laser", "enemy_blue_bullet", "enemy_yellow_laser")
+  int lifeTime;      // レーザーなど、特定の時間だけ存在する攻撃の残り時間 (フレーム数またはミリ秒)
+
+  // 通常の弾用コンストラクタ
+  Bullet(float startX, float startY, float sX, float sY, int dmg, String t) {
+    this.x = startX;
+    this.y = startY;
+    this.speedX = sX;
+    this.speedY = sY;
+    this.damage = dmg;
+    this.type = t;
+    this.lifeTime = -1; // -1 は寿命なし（通常の弾）を意味する
+    
+    // タイプに応じたサイズ設定（例）
+    if (t.equals("player_bullet") || t.equals("enemy_blue_bullet")) {
+      this.width = 10;
+      this.height = 10;
+    } else if (t.equals("player_laser")) {
+      this.width = 50; // レーザーの幅
+      this.height = 5; // レーザーの長さ (水平方向を想定)
+    } else if (t.equals("enemy_yellow_laser")) {
+      this.width = width; // 画面幅全体を想定
+      this.height = 20; // 敵レーザーの太さ
+    }
+  }
+
+  // 寿命を持つ攻撃用コンストラクタ（主にレーザー）
+  Bullet(float startX, float startY, float sX, float sY, int dmg, String t, int life) {
+    this(startX, startY, sX, sY, dmg, t); // 通常のコンストラクタを呼び出し
+    this.lifeTime = life; // 寿命を設定
+    
+    // 寿命を持つ攻撃のタイプに応じたサイズ設定
+    if (t.equals("player_laser")) {
+      this.width = 50; 
+      this.height = 5; 
+    } else if (t.equals("enemy_yellow_laser")) {
+      this.width = width; // 画面幅全体を想定
+      this.height = 20; // 敵レーザーの太さ
+    }
+  }
+
+  void update() {
+    // プレイヤーの弾や青い敵の弾のように移動するもの
+    if (type.equals("player_bullet") || type.equals("enemy_blue_bullet")) {
+      x += speedX;
+      y += speedY;
+    } 
+    // プレイヤーのレーザーは通常、X座標は固定か、Playerの位置に連動する
+    // ここでは、一定時間持続する固定位置のレーザーとして扱う
+    else if (type.equals("player_laser") || type.equals("enemy_yellow_laser")) {
+      // レーザーはここでは移動させず、Attackクラスでプレイヤー/敵の位置に同期させるか、固定位置で描画する
+    }
+
+    // 寿命がある場合、減少させる
+    if (lifeTime > 0) {
+      lifeTime--;
+    }
+  }
+
+  boolean isAlive() {
+    return lifeTime != 0; // lifeTimeが0になったら寿命が尽きたと判断
+  }
+  
+  // 描画メソッド (Processingのメインスケッチから呼び出す)
+  void display() {
+    pushStyle();
+    if (type.equals("player_bullet")) {
+      fill(0, 255, 0); // 緑色の弾
+      ellipse(x, y, width, height);
+    } else if (type.equals("player_laser")) {
+      fill(255, 0, 0, 150); // 半透明の赤いレーザー
+      rect(x, y - height/2, width, height); // プレイヤーの中心から発射されるようにYを調整
+    } else if (type.equals("enemy_blue_bullet")) {
+      fill(255, 255, 0); // 黄色の敵弾
+      ellipse(x, y, width, height);
+    } else if (type.equals("enemy_yellow_laser")) {
+      fill(255, 100, 0, 180); // オレンジ色の敵レーザー
+      rect(x, y - height/2, width, height); // 画面中央などに描画
+    }
+    popStyle();
+  }
+
+  // ゲッターメソッド
+  float getX() { return x; }
+  float getY() { return y; }
+  int getDamage() { return damage; }
+  String getType() { return type; }
+  float getWidth() { return width; }
+  float getHeight() { return height; }
+}
+
+Attackクラス
+// Attack.pde
+
+import java.util.ArrayList;
+
+class Attack {
+  ArrayList<Bullet> playerBullets; // プレイヤーが発射した弾丸（およびレーザー）のリスト
+  // 敵の攻撃間隔管理用
+  long lastBlueShotTime = 0;
+  long lastYellowLaserTime = 0;
+  long lastRedRushTime = 0; // 赤い敵の突進間隔
+
+  // コンストラクタ
+  Attack() {
+    playerBullets = new ArrayList<Bullet>();
+    enemyBullets = new ArrayList<Bullet>();
+
+  // プレイヤーの攻撃生成
+      // レーザーは一定時間表示され続ける
+    } else {
+      // 通常の弾は右方向に飛ぶ
+      playerBullets.add(new Bullet(x + 20, y, 10, 0, 1, "player_bullet")); // プレイヤーの右から発射
+  // 敵の攻撃生成
+  void enemyShoot(float enemyX, float enemyY, String enemyType) {
+    if (enemyType.equals("blue")) {
+      // 青色の敵：5秒に1回、単発の弾
+        // 敵の弾はプレイヤーに向かって飛ぶように速度を計算することもできるが、今回は単純に左方向へ
+    } else if (enemyType.equals("yellow")) {
+      // 1分経過したかどうかは、ゲーム全体の時間管理やUIクラスの連携が必要
+         lastYellowLaserTime = currentTime;
+    } else if (enemyType.equals("red")) {
+      // 突進はBulletではなくEnemyクラスの移動として扱うため、ここではBulletを生成しない。
+      // 例えば、Enemyクラスのattack()メソッドを呼び出すなど。
+      // このAttackクラスのenemyShootメソッドは、主に弾を生成する役割に限定する。
+    }
+  }
+
+  // 弾（およびレーザー）の移動と寿命処理
+  void updateAttacks() {
+    // プレイヤーの弾の更新
+    for (int i = playerBullets.size() - 1; i >= 0; i--) {
+      Bullet b = playerBullets.get(i);
+      b.update();
+      // 画面外に出たか、寿命が尽きたら削除
+      if (b.getX() > width + 50 || b.getX() < -50 || b.getY() > height + 50 || b.getY() < -50 || !b.isAlive()) {
+        playerBullets.remove(i);
+      }
+    }
+
+    // 敵の弾の更新
+    for (int i = enemyBullets.size() - 1; i >= 0; i--) {
+      Bullet b = enemyBullets.get(i);
+      b.update();
+      // 画面外に出たか、寿命が尽きたら削除
+      if (b.getX() > width + 50 || b.getX() < -50 || b.getY() > height + 50 || b.getY() < -50 || !b.isAlive()) {
+        enemyBullets.remove(i);
+      }
+    }
+  }
+
+  // 当たり判定とダメージ処理
+  void checkHits(ArrayList<Enemy> enemies, Player player) {
+    // プレイヤーの弾と敵の当たり判定
+    for (int i = playerBullets.size() - 1; i >= 0; i--) {
+      Bullet pBullet = playerBullets.get(i);
+      boolean hitEnemy = false; // 今回の弾が敵に当たったか
+
+      for (int j = enemies.size() - 1; j >= 0; j--) {
+        Enemy enemy = enemies.get(j);
+
+        // 敵が生きている場合のみ判定
+        if (!enemy.isDead()) {
+          // 当たり判定ロジック (ここでは単純な矩形衝突を想定)
+          // 仮に敵のサイズを30x30とする
+          if (pBullet.getX() < enemy.x + 30 &&
+              pBullet.getX() + pBullet.getWidth() > enemy.x &&
+              pBullet.getY() < enemy.y + 30 &&
+              pBullet.getY() + pBullet.getHeight() > enemy.y) {
+            
+            // 敵にダメージを与える
+            enemy.takeDamage(pBullet.getDamage());
+            
+            // プレイヤーの通常の弾は当たったら消える
+            if (pBullet.getType().equals("player_bullet")) {
+              hitEnemy = true;
+            }
+            // レーザーは複数の敵に当たるので、すぐには消さない（寿命で消える）
+        }
+      }
+      if (hitEnemy) {
+        playerBullets.remove(i); // 弾が当たったら削除
+    }
+
+    // 敵の弾とプレイヤーの当たり判定
+    float playerHitboxH = 30;
+
+    for (int i = enemyBullets.size() - 1; i >= 0; i--) {
+      if (eBullet.getX() < playerHitboxX + playerHitboxW &&
+          eBullet.getY() + eBullet.getHeight() > playerHitboxY) {
+        // プレイヤーにダメージを与える
+        player.takeDamage(eBullet.getDamage());
+
+        // 敵の弾は当たったら消える
+        enemyBullets.remove(i);
+      }
+    }
+
+    // 赤い敵の突進とプレイヤーの当たり判定 (Bulletリストとは独立)
+        // 赤い敵の突進状態をEnemyクラスが持つと仮定 (例: enemy.isRushing())
+          // ただし、10秒に1回という条件はAttackクラスで管理するのが難しい
+
+          // if (enemy.isRushing() && currentTime - lastRedRushTime > 10000) { // Enemyが突進中かつ10秒経過
+          // lastRedRushTime = currentTime;
+
+          // よりシンプルな一時的な実装:
+          // 衝突したらダメージを与えるが、間隔管理はEnemy側で厳密に
+          // ここではAttackクラスが間隔を管理するフリをして、毎回はダメージを与えないようにする
+          long currentTime = millis();
+          if (currentTime - lastRedRushTime > 10000) { // 10秒に1回のみダメージ
+              player.takeDamage(3);
+              lastRedRushTime = currentTime;
+              // 突進がヒットしたら赤い敵は一時停止または反転するなどの処理もEnemy側で
+        }
+      }
+    }
+  }
+
+  // 描画メソッド (Processingのメインスケッチから呼び出す)
+    for (Bullet b : playerBullets) {
+      b.display();
+    }
+    for (Bullet b : enemyBullets) {
+      b.display();
+    }
+  }
+}
+
+
+UIクラス
+// UI.pde
+
+import processing.core.PFont; // PFontを使用するためにインポート
+
+class UI {
+  int playerHP;     // プレイヤーの現在の体力（表示用）
+  int playerMaxHP;  // プレイヤーの最大体力（HPバーの長さ計算用）
+  PFont font;       // テキスト表示用のフォントオブジェクト
+  // コンストラクタ
+  UI() {
+    // フォントのロード (Processingのdataフォルダにフォントファイルが必要)
+    // 例えば、プロジェクトフォルダのdataフォルダに"Arial.ttf"がある場合:
+    // ここではProcessingのデフォルトフォントを使用
+    font = createFont("sans-serif", 16); 
+    textFont(font);
+
+    // 初期値
+    playerHP = 0;
+    playerMaxHP = 0;
+    flameGauge = 0;
+    gaugeMax = 100; // 例: 100で満タン
+  }
+
+  // UI表示用の値を更新
+  void update(int currentHP, int maxHP, float currentGauge, float maxGauge) {
+    this.playerMaxHP = maxHP;
+    this.flameGauge = currentGauge;
+    this.gaugeMax = maxGauge;
+  }
+
+  // UI要素を画面に描画
+  void display() {
+    pushStyle(); // 現在の描画スタイルを保存
+
+    // HPバーの描画
+    float hpRatio = (float)playerHP / playerMaxHP; // HPの割合
+
+    stroke(0); // 枠線
+    fill(50);  // 背景
+    if (hpRatio > 0.6) {
+      fill(0, 200, 0); // 緑
+    } else {
+    }
+    rect(20, 20, currentHpBarWidth, hpBarHeight); // 現在のHPバー
+    fill(255); // テキスト色
+    textSize(14);
+    textAlign(CENTER, CENTER);
+    // レーザーゲージの描画
+    float gaugeBarWidth = 200;
+    float gaugeBarHeight = 15;
+    stroke(0);
+    fill(50);
+    rect(20, 50, gaugeBarWidth, gaugeBarHeight); // ゲージの背景
+
+    fill(0, 100, 200); // ゲージの色（青）
+    rect(20, 50, currentGaugeBarWidth, gaugeBarHeight); // 現在のゲージ
+
+    fill(255);
+    textSize(12);
+    textAlign(LEFT, CENTER);
+    text("LASER GAUGE: " + (int)flameGauge + "/" + (int)gaugeMax, 25, 50 + gaugeBarHeight / 2);
+    // ゲージが満タンになった時の表示
+      fill(255, 255, 0); // 黄色
+      textSize(20);
+      textAlign(CENTER, CENTER);
+      text("LASER READY!", width / 2, height - 50); // 画面下部に表示
+    }
+
+    popStyle(); // 保存した描画スタイルを復元
+  }
+}

@@ -1,0 +1,4 @@
+クラス：enemy　
+担当：原田　海輝
+属性：x,y位置 width,height敵のサイズ　speed移動スピード　direction移動方向　alive生きているか　
+メソッド：move横移動,shiftDown下に移動,　isAtEdge()画面端に到達判定、isHit()当たり判定

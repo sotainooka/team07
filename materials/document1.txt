@@ -1,9 +1,40 @@
-クラス：enemy　担当：原田　属性：x,y位置 width,height敵のサイズ　speed移動スピード　direction移動方向　alive生きているか　メソッド：move横移動,shiftDown下に移動,　isAtEdge()画面端に到達判定、isHit()当たり判定
-　
-クラス：player　担当：松村　属性：float x, y, float speed,　int hp（10）, int attack(普通の弾は攻撃力１、レーザーは２),int gauge, int gaugeMax メソッド：void move(),キー入力による上下左右移動　void display(), void shoot()通常弾の発射　void shootLaser()レーザーの発射　void takeDamage(), 
+クラス：player　
+担当：松村　
+属性：float x, y,プレイヤーの位置 
+　　　float speed,移動速度　
+　　　int hp,体力(10) 
+　　　int attack,普通の弾は攻撃力１、レーザーは２　
+　　　int gauge,レーザーのゲージ 
+　　　int gaugeMax ゲージの最大値
+メソッド：void move(),キー入力による上下左右移動　
+	void display(),HPやゲージの表示 
+	void shoot()通常弾の発射　
+	void shootLaser()レーザーの発射　
+	void takeDamage()ダメージを受けてHPを減らす
+	void addGauge()敵を倒したときなどにゲージを増やす
+クラス：game
+担当：松村優里
+属性：　Player player プレイヤー本体
+	ArrayList<Enemy>　敵リスト
+	ArrayList<Attack>　プレイヤーと敵の弾リスト
+	int score　スコア
+メソッド：void update()プレイヤーと敵の状態更新
+	void display()全要素の表示
+	void checkCollisions()弾と敵、敵とプレイヤーの衝突判定
 
-クラス：UI　担当：　属性：　メソッド：
+クラス：Title
+担当：松村優里
+属性：String titleText	ゲームタイトル文字列
+	Button startButton	「スタート」ボタン
+	Button settingsButton	「設定」ボタン（なくてもOK）
+	Button instructionsButton	「説明」ボタン
+メソッド：void display()	タイトル画面の表示
+	void handleClick()	ボタンのクリック判定・処理分岐
 
-クラス：attack　担当：　属性：　メソッド：
+クラス：Settings
+属性：Slider bgmSlider	BGMの音量設定
+	Dropdown difficultySelect	難易度選択
+	Button backButton	タイトルへ戻るボタン
+メソッド：void display()	設定画面を描画
+	void handleClick()	UI操作と値の反映
 
-クラス：　担当：　属性：　メソッド：

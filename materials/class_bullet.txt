@@ -1,0 +1,23 @@
+クラス名：Bullet
+主担当者名:猪岡奏太
+
+属性
+- float x, y : 弾/レーザーの現在のX, Y座標
+- float speedX, speedY : 弾/レーザーのX, Y方向の移動速度
+- int damage : 弾/レーザーの攻撃力
+- String type : 弾の種類（例: "player_bullet", "player_laser", "enemy_blue_bullet", "enemy_yellow_laser"）
+- int lifeTime : レーザーなど、特定の時間だけ存在する攻撃の残りフレーム数や時間（ミリ秒）。通常の弾であれば不要、または最大値を設定。
+- float width, height : 弾/レーザーの当たり判定や描画に使う幅と高さ（必要であれば）
+
+メソッド一覧
+- Bullet(float startX, float startY, float sX, float sY, int dmg, String t) : コンストラクタ。弾の初期位置、速度、ダメージ、種類を設定する。
+- Bullet(float startX, float startY, int dmg, String t, int life) : コンストラクタ。レーザーなど、寿命を持つ攻撃用。
+- update() : 弾/レーザーの位置を`speedX`, `speedY`に基づいて更新する。`lifeTime`がある場合は減らす。
+- isAlive() : `lifeTime`が0より大きい、または通常の弾（寿命がない）の場合にtrueを返す。画面外に出たかどうかはAttackクラスで判定。
+- getX(), getY(), getDamage(), getType(), getWidth(), getHeight() : 各属性のゲッターメソッド（外部から値を取得するため）。
+
+メモ
+- このクラスは、Attackクラスの`playerBullets`と`enemyBullets`リストに格納されるオブジェクトの型となる。
+- `update()` メソッドはAttackクラスの`updateBullets()`内で呼び出され、個々の弾の位置を更新する。
+- `isAlive()` メソッドは、主にレーザーのような寿命のある攻撃が消滅したかを判断するために使用される。
+- 当たり判定に使用する幅と高さは、必要に応じて属性として追加する。

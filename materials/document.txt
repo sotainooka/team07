@@ -4,6 +4,7 @@
 
 クラス：UI　担当：　属性：　メソッド：
 
-クラス：attack　担当：　属性：　メソッド：
+クラス：attack　担当：猪岡奏太　属性：ArrayList<Bullet> playerBullets　 ArrayList<Bullet> enemyBullets　　メソッド： playerShoot(float x, float y, boolean isLaser)　 enemyShoot(float x, float y, String enemyType)　 updateBullets()　 checkHits(ArrayList<Enemy> enemies, Player player)
+
 
 クラス：　担当：　属性：　メソッド：

@@ -1,0 +1,34 @@
+クラス名：Attack
+主担当者名：猪岡奏太
+
+【属性（変数）一覧】
+- ArrayList<Bullet> playerBullets : プレイヤーが発射した弾丸のリスト
+- ArrayList<Bullet> enemyBullets : 敵が発射した弾丸のリスト
+
+【メソッド一覧】
+- playerShoot(float x, float y, boolean isLaser)
+　→ プレイヤーの位置(x, y)から、isLaserがtrueならレーザー、falseなら弾丸を発射し、playerBullets に追加する。
+　　 弾の攻撃力は1、レーザーの攻撃力は2。
+- enemyShoot(float x, float y, String enemyType)
+　→ 敵の位置(x, y)から、敵の種類(enemyType)に応じて攻撃を生成し、enemyBullets に追加する。
+　　 ・青色の敵：5秒に1回、単発の弾を放つ（プレイヤーの弾と同じ大きさ、威力1）。
+　　 ・赤色の敵：10秒に1回、正面に突進する攻撃（攻撃力3）。突進はBulletとしてではなく、Enemyクラスの移動として扱う可能性も検討。
+　　 ・黄色の敵：1分以内に倒せない場合、プレイヤーのHPを7削るレーザー攻撃。
+- updateBullets()
+　→ playerBullets と enemyBullets の全ての弾（またはレーザー）の位置を更新する。
+　　 画面外に出た弾はリストから削除する。
+- checkHits(ArrayList<Enemy> enemies, Player player)
+　→ playerBullets と enemies の間の当たり判定を行い、敵にダメージを与える。
+　　 → enemyBullets と player の間の当たり判定を行い、プレイヤーにダメージを与える。
+　　 ・プレイヤーの弾が敵に当たった場合：敵のHPを減らす。
+　　 ・プレイヤーのレーザーが敵に当たった場合：レーザーの範囲内の複数の敵にダメージを与える。
+　　 ・敵の弾がプレイヤーに当たった場合：プレイヤーのHPを減らす。
+　　 ・赤色の敵の突進がプレイヤーに当たった場合：プレイヤーのHPを減らす。
+
+【メモ】
+- レーザー攻撃は範囲攻撃であり、複数の敵に同時にダメージを与える。
+- 弾やレーザーは Bullet クラス（Attackクラスの内部クラスまたは独立したクラス）として管理する。
+  Bulletクラスには、位置、速度、攻撃力、種類（弾、レーザー）などの属性が必要。
+- checkHits() メソッドはゲームループの毎フレーム呼ばれ、常に衝突判定を行う。
+- 赤い敵の突進攻撃は、AttackクラスでBulletとして管理するよりも、Enemyクラスの移動と連携して当たり判定を処理する方が自然かもしれない。要検討。
+- 黄色い敵のレーザー攻撃は、Attackクラスで生成・管理し、特定の時間経過後に発動させるロジックが必要。

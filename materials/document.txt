@@ -1,0 +1,9 @@
+クラス：enemy　担当：　属性：　メソッド：
+　
+クラス：player　担当：松村　属性：float x, y, float speed,　int hp（10）, int attack(普通の弾は攻撃力１、レーザーは２),int gauge, int gaugeMax メソッド：void move(),キー入力による上下左右移動　void display(), void shoot()通常弾の発射　void shootLaser()レーザーの発射　void takeDamage(), 
+
+クラス：UI　担当：　属性：　メソッド：
+
+クラス：attack　担当：　属性：　メソッド：
+
+クラス：　担当：　属性：　メソッド：

@@ -1,0 +1,18 @@
+クラス名：UI
+
+担当：猪岡奏太
+
+属性
+- int playerHP : プレイヤーの現在の体力（表示用）
+- int playerMaxHP : プレイヤーの最大体力（HPバーの長さ計算用）
+- float gaugeMax : レーザーゲージの最大値（例：1.0 または 100）
+- PFont font : テキスト表示用のフォントオブジェクト (ProcessingのPFontクラス)
+メソッド一覧
+- UI() : コンストラクタ。UIの初期設定（フォントのロード、ゲージの初期値など）を行う。
+- update(int currentHP, int maxHP, float currentGauge, float maxGauge)
+　→ プレイヤーの現在の体力、最大体力、レーザーゲージの現在の値と最大値を引数として受け取り、表示用の属性（playerHP, playerMaxHP, flameGauge, gaugeMax）を更新する。
+　→ プレイヤーのHPバー、レーザーゲージ、スコア（もしあれば）、ゲームメッセージなどを画面に描画する。
+　　 ・レーザーゲージは`flameGauge`と`gaugeMax`に基づいて描画する。ゲージが満タンになったら、プレイヤーにレーザー使用可能になったことを視覚的に知らせるエフェクトやメッセージを表示する。
+メモ
+- 描画部分は、Processingの図形描画関数（`rect()`, `text()`, `fill()`, `stroke()`など）を使用して、グラフィカルに表現する。
+- スコア表示やタイマー表示など、他のUI要素が必要になった場合、このクラスに追加する。

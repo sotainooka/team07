@@ -15,7 +15,7 @@ ArrayList<EnemyBullet> enemyBullets;
 int enemyFireInterval = 90;  // 何フレームに1発撃つか（約1.5秒）
 int enemyFireTimer = 0;
 boolean isGameOver = false;
-
+boolean isGameClear = false;
 
 void setup() {
   size(480, 640);
@@ -70,6 +70,22 @@ void drawTitleScreen() {
 }
 
 void drawGameScreen() {
+  if (isGameOver) {
+  fill(255, 0, 0);
+  textAlign(CENTER, CENTER);
+  textSize(36);
+  text("GAME OVER", width / 2, height / 2);
+  return;
+}
+
+if (isGameClear) {
+  fill(0, 255, 0);
+  textAlign(CENTER, CENTER);
+  textSize(36);
+  text("GAME CLEAR!", width / 2, height / 2);
+  return;
+}
+
   if (isGameOver) {
   fill(255, 0, 0);
   textAlign(CENTER, CENTER);
@@ -159,8 +175,17 @@ for (int i = enemyBullets.size() - 1; i >= 0; i--) {
     isGameOver = true;
   }
 }
-
- 
+// 全ての敵が倒されていたらクリア
+boolean allEnemiesDead = true;
+for (Enemy e : enemies) {
+  if (e.alive) {
+    allEnemiesDead = false;
+    break;
+  }
+}
+if (allEnemiesDead) {
+  isGameClear = true;
+}
 }
 
 void mousePressed() {

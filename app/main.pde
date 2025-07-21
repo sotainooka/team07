@@ -19,6 +19,8 @@ boolean isGameClear = false;
 
 void setup() {
   size(480, 640);
+  PFont font = createFont("MS Gothic", 16);  // Windowsなら"MS Gothic"が定番
+  textFont(font);
   initGame();
 }
 
@@ -71,28 +73,25 @@ void drawTitleScreen() {
 
 void drawGameScreen() {
   if (isGameOver) {
-  fill(255, 0, 0);
-  textAlign(CENTER, CENTER);
-  textSize(36);
-  text("GAME OVER", width / 2, height / 2);
-  return;
-}
+    fill(255, 0, 0);
+    textAlign(CENTER, CENTER);
+    textSize(36);
+    text("GAME OVER", width / 2, height / 2);
+    textSize(16);
+    text("スペースキーでタイトルへ", width / 2, height / 2 + 40);
+    return;
+  }
 
 if (isGameClear) {
-  fill(0, 255, 0);
-  textAlign(CENTER, CENTER);
-  textSize(36);
-  text("GAME CLEAR!", width / 2, height / 2);
-  return;
-}
+    fill(0, 255, 0);
+    textAlign(CENTER, CENTER);
+    textSize(36);
+    text("GAME CLEAR!", width / 2, height / 2);
+    textSize(16);
+    text("スペースキーでタイトルへ", width / 2, height / 2 + 40);
+    return;
+  }
 
-  if (isGameOver) {
-  fill(255, 0, 0);
-  textAlign(CENTER, CENTER);
-  textSize(36);
-  text("GAME OVER", width / 2, height / 2);
-  return;
-}
   player.move();
   player.display();
 
@@ -201,8 +200,13 @@ void mousePressed() {
 
 void keyPressed() {
   if (currentScreen.equals("game")) {
-    if (key == ' ') {
+    if (!isGameOver && !isGameClear && key == ' ') {
       bullets.add(new Bullet(player.x, player.y));
+    }
+    if ((isGameOver || isGameClear) && key == ' ') {
+      currentScreen = "title";
+      isGameOver = false;
+      isGameClear = false;
     }
   }
 }

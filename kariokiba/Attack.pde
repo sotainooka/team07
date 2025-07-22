@@ -1,134 +1,85 @@
-// Attack.pde
-
-import java.util.ArrayList;
-
 class Attack {
-  // playerBullets は Playerクラスから受け取るArrayList
-  // enemyBullets も同様
-  ArrayList<Bullet> enemyBullets; // 敵の弾用リスト
+  ArrayList<Bullet> playerBullets;
+  ArrayList<Bullet> enemyBullets;
+  int frameCountBlue = 0;
+  int frameCountRed = 0;
+  int frameCountYellow = 0;
 
-  // 敵の攻撃間隔管理用
-  long lastBlueShotTime = 0;
-  long lastYellowLaserTime = 0;
-  long lastRedRushTime = 0;
-
-  // コンストラクタ (リストは外部から渡されるか、ここで初期化)
   Attack() {
-    enemyBullets = new ArrayList<Bullet>(); // 敵の弾リストはここで管理
+    playerBullets = new ArrayList<Bullet>();
+    enemyBullets = new ArrayList<Bullet>();
   }
 
-  // プレイヤーの弾を生成し、リストに追加
-  // playerBullets リストはメインスケッチで管理し、ここに渡す
-  void playerShoot(float playerX, float playerY, boolean isLaser, ArrayList<Bullet> playerBulletsList) {
+  void playerShoot(float x, float y, boolean isLaser) {
     if (isLaser) {
-      // レーザー用のBulletコンストラクタを呼び出す
-      playerBulletsList.add(new Bullet(playerX - 25, playerY - 2.5, 0, -10, 2, true, 60)); // 強力レーザー, 寿命60フレーム
+      playerBullets.add(new Bullet(x, y, 2, "player_laser", 30));
     } else {
-      playerBulletsList.add(new Bullet(playerX + 20, playerY, 0, -8, 1, true)); // 通常弾
+      playerBullets.add(new Bullet(x, y, 0, -8, 1, "player_bullet"));
     }
   }
 
-  // 敵の弾を生成し、リストに追加 (敵の種類に応じて弾を生成)
-  void enemyShoot(float enemyX, float enemyY, String enemyType) {
-    long currentTime = millis();
-
+  void enemyShoot(float x, float y, String enemyType) {
     if (enemyType.equals("blue")) {
-      if (currentTime - lastBlueShotTime > 2000) { // 2秒に1回
-        // 敵の弾は下方向に飛ぶように調整 (y軸正方向)
-        enemyBullets.add(new Bullet(enemyX, enemyY + 10, 0, 3, 1, false)); // 通常敵弾
-        lastBlueShotTime = currentTime;
+      frameCountBlue++;
+      if (frameCountBlue % (60 * 5) == 0) {
+        enemyBullets.add(new Bullet(x, y, 0, 4, 1, "enemy_blue_bullet"));
       }
-    } else if (enemyType.equals("yellow")) {
-      if (currentTime - lastYellowLaserTime > 15000) { // 15秒に1回レーザー
-        // 敵レーザーは画面横断を想定
-        enemyBullets.add(new Bullet(0, enemyY, 0, 0, 3, false, 90)); // 敵の強力レーザー, 寿命90フレーム
-        lastYellowLaserTime = currentTime;
-      }
-    } else if (enemyType.equals("red")) {
-      // 赤い敵の突進はEnemyクラスで直接移動を管理するため、ここでは弾は生成しない
-      // ここは「弾」の発射のみに限定
     }
+    else if (enemyType.equals("yellow")) {
+      frameCountYellow++;
+      if (frameCountYellow >= 60 * 60) {  // 1分後
+        enemyBullets.add(new Bullet(x, y, 0, 6, 7, "enemy_yellow_laser"));
+        frameCountYellow = 0;
+      }
+    }
+    // 赤は突進系のため、ここでは弾は生成しない
   }
 
-  // 弾の移動と寿命処理
-  void updateBullets(ArrayList<Bullet> playerBulletsList) { // playerBulletsList を引数として受け取る
-    // プレイヤーの弾の更新
-    for (int i = playerBulletsList.size() - 1; i >= 0; i--) {
-      Bullet b = playerBulletsList.get(i);
+  void updateBullets() {
+    for (int i = playerBullets.size() - 1; i >= 0; i--) {
+      Bullet b = playerBullets.get(i);
       b.update();
-      if (!b.isAlive()) { // 画面外か寿命切れ
-        playerBulletsList.remove(i);
+      if (!b.isAlive() || b.y < 0) {
+        playerBullets.remove(i);
       }
     }
 
-    // 敵の弾の更新
     for (int i = enemyBullets.size() - 1; i >= 0; i--) {
       Bullet b = enemyBullets.get(i);
       b.update();
-      if (!b.isAlive()) { // 画面外か寿命切れ
+      if (!b.isAlive() || b.y > height) {
         enemyBullets.remove(i);
       }
     }
   }
 
-  // 当たり判定とダメージ処理
-  // enemiesList と player はメインスケッチから渡される
-  void checkHits(ArrayList<Enemy> enemiesList, Player player) {
-    // プレイヤーの弾と敵の当たり判定
-    for (int i = player.bullets.size() - 1; i >= 0; i--) { // Playerクラスがbulletsリストを持っていると仮定
-      Bullet pBullet = player.bullets.get(i);
-      boolean hitEnemy = false;
-
-      for (int j = enemiesList.size() - 1; j >= 0; j--) {
-        Enemy enemy = enemiesList.get(j);
-
-        if (enemy.alive) { // 敵が生きている場合のみ判定
-          if (pBullet.isHit(enemy)) { // EnemyクラスにisHitメソッドが必要
-            enemy.takeDamage(pBullet.getDamage());
-
-            if (pBullet.getType().equals("player_bullet")) { // 通常弾は当たったら消える
-              hitEnemy = true;
-            }
-            // レーザーは複数の敵に当たるので、すぐには消さない（寿命で消える）
-          }
+  void checkHits(ArrayList<Enemy> enemies, Player player) {
+    // プレイヤーの弾が敵に当たる
+    for (int i = playerBullets.size() - 1; i >= 0; i--) {
+      Bullet b = playerBullets.get(i);
+      for (Enemy e : enemies) {
+        if (e.alive && e.isHit(b)) {
+          e.alive = false;
+          player.addGauge(1);
+          playerBullets.remove(i);
+          break;
         }
-      }
-      if (hitEnemy) {
-        player.bullets.remove(i); // 弾が当たったら削除
       }
     }
 
-    // 敵の弾とプレイヤーの当たり判定
+    // 敵の弾がプレイヤーに当たる
     for (int i = enemyBullets.size() - 1; i >= 0; i--) {
-      Bullet eBullet = enemyBullets.get(i);
-      // PlayerクラスにisHitメソッドが必要
-      if (player.isHit(eBullet)) {
-        player.takeDamage(eBullet.getDamage());
-
-        // 敵の通常弾は当たったら消える。レーザーは寿命で消える
-        if (!eBullet.getType().equals("enemy_yellow_laser")) {
-          enemyBullets.remove(i);
-        }
-      }
-    }
-
-    // 赤い敵の突進とプレイヤーの当たり判定
-    long currentTime = millis();
-    for (Enemy enemy : enemiesList) {
-      if (enemy.type.equals("red") && enemy.isRushing() && enemy.alive) { // 赤い敵が突進中で生きている
-        if (player.isHit(enemy)) { // PlayerクラスにEnemyとのisHitメソッドが必要
-          if (currentTime - lastRedRushTime > 1000) { // 1秒に1回のみダメージ
-            player.takeDamage(3); // 赤い敵の突進ダメージ
-            lastRedRushTime = currentTime;
-          }
-        }
+      Bullet b = enemyBullets.get(i);
+      if (b.x > player.x && b.x < player.x + 40 &&
+          b.y > player.y && b.y < player.y + 40) {
+        player.takeDamage(b.getDamage());
+        enemyBullets.remove(i);
       }
     }
   }
 
-  // 描画メソッド
-  void displayBullets(ArrayList<Bullet> playerBulletsList) { // playerBulletsList を引数として受け取る
-    for (Bullet b : playerBulletsList) {
+  void displayBullets() {
+    for (Bullet b : playerBullets) {
       b.display();
     }
     for (Bullet b : enemyBullets) {

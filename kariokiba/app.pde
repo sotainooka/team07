@@ -95,7 +95,7 @@ void updateGame() {
   // 敵の攻撃（簡易タイミングで自動発射）
   for (Enemy e : enemies) {
     if (e.alive) {
-      attack.enemyShoot(e.x + e.width / 2, e.y + e.height, e.type);
+      attack.enemyShoot(e.x + e.w / 2, e.y + e.h, e.type);
     }
   }
 

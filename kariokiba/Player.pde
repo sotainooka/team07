@@ -5,6 +5,7 @@ class Player {
   int gauge;          // レーザーゲージ
   int gaugeMax = 5;
   PImage img;
+  int maxHP = 10;
 
   Player(float x, float y) {
     this.x = x;
@@ -34,12 +35,12 @@ class Player {
   }
 
   void shoot(ArrayList<Bullet> bullets) {
-    bullets.add(new Bullet(x + 20, y, 0, -8, 1, true));  // 通常弾
+    bullets.add(new Bullet(x + 20, y, 0, -8, 1, "normal"));  // 通常弾
   }
 
   void shootLaser(ArrayList<Bullet> bullets) {
     if (gauge >= gaugeMax) {
-      bullets.add(new Bullet(x + 20, y, 0, -10, 2, true)); // 強力レーザー
+      bullets.add(new Bullet(x + 20, y, 0, -10, 2, "laser"));  // 強力レーザー
       gauge = 0;  // リセット
     }
   }

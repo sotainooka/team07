@@ -16,15 +16,21 @@ int enemyFireInterval = 90;  // 何フレームに1発撃つか（約1.5秒）
 int enemyFireTimer = 0;
 boolean isGameOver = false;
 boolean isGameClear = false;
+int startTime;
+int clearTime = 0;  // クリア時の時間
+int difficulty = 2;  // 1: Easy, 2: Normal, 3: Hard
 
 void setup() {
   size(480, 640);
   PFont font = createFont("MS Gothic", 16);  // Windowsなら"MS Gothic"が定番
   textFont(font);
   initGame();
+  imageMode(CENTER);
 }
 
 void initGame() {
+  setDifficulty(difficulty);
+  startTime = millis(); 
   player = new Player();
   bullets = new ArrayList<Bullet>();
   enemies = new ArrayList<Enemy>();
@@ -50,6 +56,7 @@ enemyFireTimer = 0;
 void draw() {
   background(0);
 
+
   if (currentScreen.equals("title")) {
     drawTitleScreen();
   } else if (currentScreen.equals("game")) {
@@ -69,6 +76,23 @@ void drawTitleScreen() {
   fill(0);
   textSize(20);
   text("START", buttonX + buttonW / 2, buttonY + buttonH / 2);
+  
+  // 難易度選択ボタン
+  fill(difficulty == 1 ? color(100, 255, 100) : 200);
+  rect(70, 360, 100, 40, 10);
+  fill(0);
+  textSize(18);
+  text("Easy", 120, 380);
+
+  fill(difficulty == 2 ? color(255, 255, 100) : 200);
+  rect(190, 360, 100, 40, 10);
+  fill(0);
+  text("Normal", 240, 380);
+
+  fill(difficulty == 3 ? color(255, 100, 100) : 200);
+  rect(310, 360, 100, 40, 10);
+  fill(0);
+  text("Hard", 360, 380);
 }
 
 void drawGameScreen() {
@@ -87,8 +111,10 @@ if (isGameClear) {
     textAlign(CENTER, CENTER);
     textSize(36);
     text("GAME CLEAR!", width / 2, height / 2);
+    textSize(20);
+    text("タイム: " + nf(clearTime / 1000.0, 0, 2) + " 秒", width / 2, height / 2 + 35);
     textSize(16);
-    text("スペースキーでタイトルへ", width / 2, height / 2 + 40);
+    text("スペースキーでタイトルへ", width / 2, height / 2 + 60);
     return;
   }
 
@@ -184,11 +210,20 @@ for (Enemy e : enemies) {
 }
 if (allEnemiesDead) {
   isGameClear = true;
+  clearTime = millis() - startTime;  // クリア時の経過時間を保存
 }
 }
 
 void mousePressed() {
   if (currentScreen.equals("title")) {
+        // 難易度ボタン
+    if (mouseX >= 100 && mouseX <= 200 && mouseY >= 360 && mouseY <= 400) {
+      difficulty = 1;  // Easy
+    } else if (mouseX >= 220 && mouseX <= 320 && mouseY >= 360 && mouseY <= 400) {
+      difficulty = 2;  // Normal
+    } else if (mouseX >= 340 && mouseX <= 440 && mouseY >= 360 && mouseY <= 400) {
+      difficulty = 3;  // Hard
+    }
     if (mouseX >= buttonX && mouseX <= buttonX + buttonW &&
         mouseY >= buttonY && mouseY <= buttonY + buttonH) {
       currentScreen = "game";
@@ -208,5 +243,19 @@ void keyPressed() {
       isGameOver = false;
       isGameClear = false;
     }
+  }
+}
+
+void setDifficulty(int level) {
+  difficulty = level;
+  if (difficulty == 1) {  // Easy
+    enemySpeed = 1.5;
+    enemyFireInterval = 120;
+  } else if (difficulty == 2) {  // Normal
+    enemySpeed = 2.0;
+    enemyFireInterval = 90;
+  } else if (difficulty == 3) {  // Hard
+    enemySpeed = 3.0;
+    enemyFireInterval = 30;
   }
 }

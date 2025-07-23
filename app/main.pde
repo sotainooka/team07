@@ -19,10 +19,13 @@ boolean isGameClear = false;
 int startTime;
 int clearTime = 0;  // クリア時の時間
 int difficulty = 2;  // 1: Easy, 2: Normal, 3: Hard
+boolean spacePressed = false;
+boolean prevSpacePressed = false;
+
 
 void setup() {
   size(480, 640);
-  PFont font = createFont("MS Gothic", 16);  // Windowsなら"MS Gothic"が定番
+  PFont font = createFont("MS Gothic", 16);  
   textFont(font);
   initGame();
   imageMode(CENTER);
@@ -55,7 +58,11 @@ enemyFireTimer = 0;
 
 void draw() {
   background(0);
-
+  
+  if (spacePressed && !prevSpacePressed && !isGameOver && !isGameClear) {
+  bullets.add(new Bullet(player.x, player.y));
+  }
+  prevSpacePressed = spacePressed;
 
   if (currentScreen.equals("title")) {
     drawTitleScreen();
@@ -235,9 +242,10 @@ void mousePressed() {
 
 void keyPressed() {
   if (currentScreen.equals("game")) {
-    if (!isGameOver && !isGameClear && key == ' ') {
-      bullets.add(new Bullet(player.x, player.y));
+    if (key == ' ') {
+      spacePressed = true;
     }
+
     if ((isGameOver || isGameClear) && key == ' ') {
       currentScreen = "title";
       isGameOver = false;
@@ -245,6 +253,14 @@ void keyPressed() {
     }
   }
 }
+
+void keyReleased() {
+  if (key == ' ') {
+    spacePressed = false;
+  }
+}
+
+
 
 void setDifficulty(int level) {
   difficulty = level;

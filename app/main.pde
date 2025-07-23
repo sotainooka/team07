@@ -109,7 +109,7 @@ void drawGameScreen() {
     textSize(36);
     text("GAME OVER", width / 2, height / 2);
     textSize(16);
-    text("スペースキーでタイトルへ", width / 2, height / 2 + 40);
+    text("エンターキーでタイトルへ", width / 2, height / 2 + 40);
     return;
   }
 
@@ -121,7 +121,7 @@ if (isGameClear) {
     textSize(20);
     text("タイム: " + nf(clearTime / 1000.0, 0, 2) + " 秒", width / 2, height / 2 + 35);
     textSize(16);
-    text("スペースキーでタイトルへ", width / 2, height / 2 + 60);
+    text("エンターキーでタイトルへ", width / 2, height / 2 + 60);
     return;
   }
 
@@ -246,7 +246,7 @@ void keyPressed() {
       spacePressed = true;
     }
 
-    if ((isGameOver || isGameClear) && key == ' ') {
+    if ((isGameOver || isGameClear) && key == ENTER) {
       currentScreen = "title";
       isGameOver = false;
       isGameClear = false;

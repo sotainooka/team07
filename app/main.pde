@@ -1,3 +1,6 @@
+import processing.sound.*;
+SoundFile hitSound;
+
 String currentScreen = "title";
 
 Player player;
@@ -29,6 +32,7 @@ void setup() {
   textFont(font);
   initGame();
   imageMode(CENTER);
+  hitSound = new SoundFile(this, "shootsound.mp3");
 }
 
 void initGame() {
@@ -142,6 +146,7 @@ for (int i = bullets.size() - 1; i >= 0; i--) {
     for (Enemy e : enemies) {
       if (e.alive && e.isHit(b)) {
         e.alive = false;
+        hitSound.play();
         bullets.remove(i);
         break;
       }
